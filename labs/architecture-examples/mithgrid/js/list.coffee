@@ -14,26 +14,22 @@ MITHgrid.Presentation.namespace "List", (list)->
       dblclickInstance = MITHgrid.DblClick.initInstance({})
       keypressInstance = MITHgrid.Enter.initInstance({})
       
-      #not sure
-      # but without this that.render doesnt trigger
       that.hasLensFor = -> true
 
       # Toggle the type of the todo item [active,compeleted]
-      toggle = (obj)->
-        p = $(obj.target).parent().parent()
-        item = dataView.getItem p.attr "id"
-        item.id = item.id[0]
+      toggle = (obj,id,el)->
+        item = dataView.getItem id
         if obj.target.checked is true
-          p.attr "class","completed"
-          item.type = ["completed"]
+          el.attr "class","completed"
+          dataView.updateItems [{id:id,type:"completed"}]
         else
-          p.attr "class","active"
-          item.type = ["active"]
-        dataView.updateItems [item]
+          el.attr "class","active"
+          dataView.updateItems [{id:id,type:"active"}]
+        
         
       #hooked to the remove button
-      remove = (obj)->
-        dataView.removeItems $(obj.target).parent().parent().attr("id")
+      remove = (id)->
+        dataView.removeItems id
 
       addClass = (el,type)->
         return false if !el?
@@ -44,6 +40,9 @@ MITHgrid.Presentation.namespace "List", (list)->
           else if state is "completed" && type isnt "completed"
             el.addClass "hidden"
 
+      # This method returns a rendering object.
+      # try to save all DOM specific data to this object.
+      # This will reduce referencing DOM directly in the code.
       that.render = (container,model,id)->
         rendering = {}
         item = model.getItem id
@@ -51,7 +50,7 @@ MITHgrid.Presentation.namespace "List", (list)->
         el = $("<li></li>")
         rendering.el = el
         el.attr "class", item.type
-        el.attr "id", item.id
+        el.attr "id", id
         el.append "<div class=\"view\"></div>" 
         el.append "<input class=\"edit\" value=" + item.text + ">"
         el[0].childNodes[1].value = item.text
@@ -64,33 +63,34 @@ MITHgrid.Presentation.namespace "List", (list)->
         el.find("div").append "<label>" + item.text + "</label>"
         el.find("div").append "<button class=\"destroy\"></button>"
 
-        $(container).append el
-        addClass el, item.type
+        # Add "completed" or "active" class to el.
+        addClass el, item.type[0]
 
-        clickInstance.bind("#"+item.id).events.onClick.addListener (e)->
-          if (node = e.target.nodeName)?
-            if node is "BUTTON"
-              rendering.remove(e.target.id)
-              remove e
-            if node is "INPUT"
-              toggle e
+        $(container).append el
+
+        # controller bindings [controllers defined in app.js]
+        clickInstance.bind("#"+id+" .toggle").events.onClick.addListener (e)->
+          toggle e,id,el
+
+        clickInstance.bind("#"+id+" .destroy").events.onClick.addListener (e)->
+          rendering.remove id
         
-        dblclickInstance.bind("#"+item.id).events.on.addListener  (e)->
+        dblclickInstance.bind("#"+id).events.on.addListener (e)->
           if (node = e.target.nodeName)?
             if node is "LABEL"
-              $(e.target).parent().parent().addClass "editing"
+              el.addClass "editing"
 
-        keypressInstance.bind("#"+item.id+" input").events.onEnter.addListener  (e)->
-          $(e.target).parent().removeClass "editing"
-          $(e.target).parent().find("label").text e.target.value
+        keypressInstance.bind("#"+id+" input").events.onEnter.addListener  (e)->
+          el.removeClass "editing"
+          el.find("label").text e.target.value
+          dataView.updateItems [{id:id, text:e.target.value}]
 
         rendering.update = (item) ->
           addClass el, item.type[0]
-          console.log "List update"      
 
-        rendering.remove = (id)->
+        rendering.remove = ->
           el.remove()
-          console.log "List remove"
+          remove id
 
         rendering
         
