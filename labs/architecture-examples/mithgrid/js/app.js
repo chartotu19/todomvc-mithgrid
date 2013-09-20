@@ -2,69 +2,19 @@
 var app,
   __slice = [].slice;
 
-MITHgrid.namespace("Click", function(that) {
-  return that.initInstance = function() {
-    var args, _ref;
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return (_ref = MITHgrid.Controller).initInstance.apply(_ref, ["MITHgrid.Click"].concat(__slice.call(args), [function(that) {
-      return that.applyBindings = function(binding) {
-        return binding.locate('').click(function(e) {
-          return binding.events.onClick.fire(e);
-        });
-      };
-    }]));
-  };
-});
-
-MITHgrid.namespace("DblClick", function(that) {
-  return that.initInstance = function() {
-    var args, _ref;
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return (_ref = MITHgrid.Controller).initInstance.apply(_ref, ["MITHgrid.DblClick"].concat(__slice.call(args), [function(that) {
-      return that.applyBindings = function(binding) {
-        return binding.locate('').dblclick(function(e) {
-          return binding.events.on.fire(e);
-        });
-      };
-    }]));
-  };
-});
-
-MITHgrid.namespace("Enter", function(that) {
-  return that.initInstance = function() {
-    var args, _ref;
-    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return (_ref = MITHgrid.Controller).initInstance.apply(_ref, ["MITHgrid.Enter"].concat(__slice.call(args), [function(that) {
-      return that.applyBindings = function(binding) {
-        binding.locate('').blur(function(e) {
-          return binding.events.onEnter.fire(e);
-        });
-        return binding.locate('').keypress(function(e) {
-          var code;
-          code = e.keyCode ? e.keyCode : e.which;
-          if (code === 13) {
-            return binding.events.onEnter.fire(e);
-          }
-        });
-      };
-    }]));
-  };
-});
-
 MITHgrid.Application.namespace("todomvc", function(exp) {
   return exp.initInstance = function() {
     var args, _ref;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return (_ref = MITHgrid.Application).initInstance.apply(_ref, ["MITHgrid.Application.todomvc"].concat(__slice.call(args), [function(that, container) {
       return that.ready(function() {
-        var List, click, dataStore, item;
+        var List, click, dataStore, enter, item;
         window["test"] = that;
         dataStore = that.dataStore.todolist;
         List = MITHgrid.Presentation.List.initInstance('#todo-list', {
           dataView: that.dataView.todolistData,
           getState: that.getState
         });
-        console.log(List);
         item = [
           {
             id: 1,
@@ -78,7 +28,12 @@ MITHgrid.Application.namespace("todomvc", function(exp) {
         ];
         dataStore.loadItems(item);
         exp = dataStore.prepare([".type"]);
-        click = MITHgrid.Click.initInstance({});
+        click = MITHgrid.Click.initInstance({
+          selectors: {
+            "clicker": ""
+          }
+        });
+        enter = MITHgrid.Enter.initInstance({});
         click.bind("#filters").events.onClick.addListener(function(e) {
           switch (e.target.text) {
             case "Active":
@@ -106,10 +61,10 @@ MITHgrid.Application.namespace("todomvc", function(exp) {
           }
           return _results;
         });
-        MITHgrid.Enter.initInstance({}).bind("#new-todo").events.onEnter.addListener(function(e) {
+        enter.bind("#new-todo").events.onEnter.addListener(function(e) {
           var ids, ref;
           if ((ref = e.target.value) != null) {
-            if (ref === "") {
+            if (ref.trim() === "") {
               return false;
             }
             ids = dataStore.items();
@@ -190,6 +145,9 @@ MITHgrid.defaults("MITHgrid.Application.todomvc", {
 });
 
 MITHgrid.defaults("MITHgrid.Click", {
+  selectors: {
+    "clicker": ".clicker"
+  },
   bind: {
     events: {
       onClick: null

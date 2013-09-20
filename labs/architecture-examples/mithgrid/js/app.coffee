@@ -1,30 +1,3 @@
-# Defining Click controller
-MITHgrid.namespace "Click", (that)->
-  that.initInstance= (args...)->
-    MITHgrid.Controller.initInstance "MITHgrid.Click", args..., (that)->
-      that.applyBindings = (binding)->
-        binding.locate('clicker').click (e)->
-          binding.events.onClick.fire(e)
-
-# Defining Click controller
-MITHgrid.namespace "DblClick", (that)->
-  that.initInstance= (args...)->
-    MITHgrid.Controller.initInstance "MITHgrid.DblClick", args..., (that)->
-      that.applyBindings = (binding)->
-        binding.locate('').dblclick (e)->
-          binding.events.on.fire(e)
-
-# Defining Keypress controller [Make it generic for any key]
-MITHgrid.namespace "Enter", (that)->
-  that.initInstance= (args...)->
-    MITHgrid.Controller.initInstance "MITHgrid.Enter", args..., (that)->
-      that.applyBindings = (binding)->
-        binding.locate('').blur (e)->
-          binding.events.onEnter.fire e
-        binding.locate('').keypress (e)->
-          code = if e.keyCode then e.keyCode else e.which
-          if code is 13
-            binding.events.onEnter.fire(e)
 
 #Application Definition
 MITHgrid.Application.namespace "todomvc", (exp)->
@@ -41,12 +14,6 @@ MITHgrid.Application.namespace "todomvc", (exp)->
           dataView:that.dataView.todolistData
           getState:that.getState
         )
-        # MITHgrid.Presentation.Overview.initInstance('#footer',
-        #   getActive:that.getActive
-        #   access:that
-        #   getCompleted:that.getCompleted
-        #   dataView:that.dataView.todolistData
-        # )
 
         #Load some data 
         item = [
@@ -91,7 +58,7 @@ MITHgrid.Application.namespace "todomvc", (exp)->
 
         enter.bind("#new-todo").events.onEnter.addListener (e)->
           if (ref = e.target.value)?
-            return false if ref is ""
+            return false if ref.trim() is "" 
             ids = dataStore.items()
             item = 
               id: parseInt(ids[ids.length-1]) + 1
