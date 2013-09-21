@@ -1,6 +1,6 @@
-MITHgrid.Presentation.namespace "List", (list)->
+MITHgrid.Presentation.namespace 'List', (list)->
   list.initInstance = (args...)->
-    MITHgrid.Presentation.initInstance "MITHgrid.Presentation.List", args..., (that,container)->
+    MITHgrid.Presentation.initInstance 'MITHgrid.Presentation.List', args..., (that,container)->
       options = that.options
       container = that.container
       dataView = that.dataView
@@ -9,7 +9,7 @@ MITHgrid.Presentation.namespace "List", (list)->
       #Create controller instances
       clickInstance = MITHgrid.Click.initInstance(
           selectors:
-            "clicker":""
+            'clicker':''
         )
       dblclickInstance = MITHgrid.DblClick.initInstance({})
       keypressInstance = MITHgrid.Enter.initInstance({})
@@ -20,11 +20,11 @@ MITHgrid.Presentation.namespace "List", (list)->
       toggle = (obj,id,el)->
         item = dataView.getItem id
         if obj.target.checked is true
-          el.attr "class","completed"
-          dataView.updateItems [{id:id,type:"completed"}]
+          el.attr 'class','completed'
+          dataView.updateItems [{id:id,type:'completed'}]
         else
-          el.attr "class","active"
-          dataView.updateItems [{id:id,type:"active"}]
+          el.attr 'class','active'
+          dataView.updateItems [{id:id,type:'active'}]
         
         
       #hooked to the remove button
@@ -33,12 +33,12 @@ MITHgrid.Presentation.namespace "List", (list)->
 
       addClass = (el,type)->
         return false if !el?
-        el.removeClass "hidden"
-        if (state = getState()) isnt "all"
-          if state is "active" && type isnt "active"
-            el.addClass "hidden"
-          else if state is "completed" && type isnt "completed"
-            el.addClass "hidden"
+        el.removeClass 'hidden'
+        if (state = getState()) isnt 'all'
+          if state is 'active' && type isnt 'active'
+            el.addClass 'hidden'
+          else if state is 'completed' && type isnt 'completed'
+            el.addClass 'hidden'
 
       # This method returns a rendering object.
       # try to save all DOM specific data to this object.
@@ -47,42 +47,42 @@ MITHgrid.Presentation.namespace "List", (list)->
         rendering = {}
         item = model.getItem id
 
-        el = $("<li></li>")
+        el = $('<li></li>')
         rendering.el = el
-        el.attr "class", item.type
-        el.attr "id", id
-        el.append "<div class=\"view\"></div>" 
-        el.append "<input class=\"edit\" value=" + item.text + ">"
+        el.attr 'class', item.type
+        el.attr 'id', id
+        el.append '<div class=\'view\'></div>' 
+        el.append '<input class=\'edit\' value=' + item.text + '>'
         el[0].childNodes[1].value = item.text
-        t = $("<input class=\"toggle\" type=\"checkbox\">")
-        if item.type is "completed"
-          t.attr "checked",true
-          el.find("div").append t
+        t = $('<input class=\'toggle\' type=\'checkbox\'>')
+        if item.type is 'completed'
+          t.attr 'checked',true
+          el.find('div').append t
         else
-          el.find("div").append t
-        el.find("div").append "<label>" + item.text + "</label>"
-        el.find("div").append "<button class=\"destroy\"></button>"
+          el.find('div').append t
+        el.find('div').append '<label>' + item.text + '</label>'
+        el.find('div').append '<button class=\'destroy\'></button>'
 
-        # Add "completed" or "active" class to el.
+        # Add 'completed' or 'active' class to el.
         addClass el, item.type[0]
 
         $(container).prepend el
 
         # controller bindings 
-        clickInstance.bind("#"+id+" .toggle").events.onClick.addListener (e)->
+        clickInstance.bind('#'+id+' .toggle').events.onClick.addListener (e)->
           toggle e,id,el
 
-        clickInstance.bind("#"+id+" .destroy").events.onClick.addListener (e)->
+        clickInstance.bind('#'+id+' .destroy').events.onClick.addListener (e)->
           rendering.remove id
         
-        dblclickInstance.bind("#"+id).events.on.addListener (e)->
+        dblclickInstance.bind('#'+id).events.on.addListener (e)->
           if (node = e.target.nodeName)?
-            if node is "LABEL"
-              el.addClass "editing"
+            if node is 'LABEL'
+              el.addClass 'editing'
 
-        keypressInstance.bind("#"+id+" input").events.onEnter.addListener  (e)->
-          el.removeClass "editing"
-          el.find("label").text e.target.value
+        keypressInstance.bind('#'+id+' input').events.onEnter.addListener  (e)->
+          el.removeClass 'editing'
+          el.find('label').text e.target.value
           dataView.updateItems [{id:id, text:e.target.value}]
 
         rendering.update = (item) ->

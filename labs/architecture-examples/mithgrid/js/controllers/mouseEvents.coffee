@@ -18,10 +18,11 @@ MITHgrid.namespace "DblClick", (that)->
 MITHgrid.namespace "Enter", (that)->
   that.initInstance= (args...)->
     MITHgrid.Controller.initInstance "MITHgrid.Enter", args..., (that)->
+      ENTER_KEY = 13
       that.applyBindings = (binding)->
         binding.locate('').blur (e)->
           binding.events.onEnter.fire e
         binding.locate('').keypress (e)->
           code = if e.keyCode then e.keyCode else e.which
-          if code is 13
+          if code is ENTER_KEY
             binding.events.onEnter.fire(e)

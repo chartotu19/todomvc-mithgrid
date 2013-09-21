@@ -1,50 +1,28 @@
-# Framework Name TodoMVC Example
+# MITHgrid TodoMVC Example
 
-> Short description of the framework provided by the official website.
+> MITHgrid is a JavaScript framework for building data-oriented, event-driven browser applications.
 
-> _[Framework Name - framework.com](link-to-framework)_
+> _[MITHgrid - http://umd-mith.github.io/mithgrid/](http://umd-mith.github.io/mithgrid/)_
 
 
-## Learning Framework Name
+## Learning MITHgrid
 
-The [Framework Name website]() is a great resource for getting started.
+The [MITHgrid website]() is a great resource for getting started.
 
 Here are some links you may find helpful:
 
-* [Documentation]()
-* [API Reference]()
-* [Applications built with Framework Name]()
-* [Blog]()
-* [FAQ]()
-* [Framework Name on GitHub]()
-
-Articles and guides from the community:
-
-* [Article 1]()
-* [Article 2]()
-
-Get help from other Framework Name users:
-
-* [Framework Name on StackOverflow](http://stackoverflow.com/questions/tagged/____)
-* [Mailing list on Google Groups]()
-* [Framework Name on Twitter](http://twitter.com/____)
-* [Framework Name on Google +]()
-
-_If you have other helpful links to share, or find any of the links above no longer work, please [let us know](https://github.com/tastejs/todomvc/issues)._
+* [Documentation](http://umd-mith.github.io/mithgrid/docs/)
+* [API Reference](http://umd-mith.github.io/mithgrid/docs/)
+* [mithgrid on GitHub](https://github.com/umd-mith/mithgrid)
 
 
-## Implementation
+Get help from other MITHgrid users:
 
-How is the app structured? Are there deviations from the spec? If so, why?
-
-
-## Running
-
-If there is a build step required to get the example working, explain it here.
-
-To run the app, spin up an HTTP server and visit http://localhost/.../myexample/.
+* [UMD_MITH on Twitter](https://twitter.com/UMD_MITH)
+* [James Smith](http://twitter.com/jgsmith)
+* [Selvam Palanimalai](http://twitter.com/selvam1991)
 
 
 ## Credit
 
-This TodoMVC application was created by [you]().
+This TodoMVC application was created by [Selvam](s).
